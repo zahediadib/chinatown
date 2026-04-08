@@ -1,0 +1,140 @@
+{
+  "project_name": "Chinatown 1960s Board Game UI",
+  "theme": {
+    "name": "1960s NYC Chinatown Vintage",
+    "archetype": "Archetype 5 (Jewel & Luxury - Dark, Moody)",
+    "mode": "dark",
+    "vibe": "Cinematic, tactical, smoky, high-stakes real estate, tactile vintage",
+    "background_texture": "Film grain or subtle parchment/noise overlay mandatory to avoid digital flatness."
+  },
+  "colors": {
+    "background": {
+      "base": "stone-950",
+      "hex": "#0c0a09",
+      "usage": "Global app background, lobbies, login screen."
+    },
+    "surface": {
+      "primary": "stone-900",
+      "glass": "black/60",
+      "card": "stone-800",
+      "usage": "Player panels, modals, interactive cards."
+    },
+    "primary": {
+      "name": "Vintage Brass/Gold",
+      "base": "amber-500",
+      "hover": "amber-400",
+      "text": "amber-950",
+      "usage": "Primary CTAs, active player borders, highlighted tiles, key UI interactions."
+    },
+    "secondary": {
+      "name": "Mahogany Red",
+      "base": "red-900",
+      "hover": "red-800",
+      "text": "red-50",
+      "usage": "Negative actions, alerts, specific board sections."
+    },
+    "accent": {
+      "name": "Jade Green",
+      "base": "emerald-800",
+      "hover": "emerald-700",
+      "text": "emerald-50",
+      "usage": "Positive income, successful trades, completion indicators."
+    },
+    "text": {
+      "primary": "amber-50",
+      "secondary": "amber-200/70",
+      "muted": "stone-400",
+      "inverted": "stone-950"
+    },
+    "borders": {
+      "subtle": "white/10",
+      "highlight": "amber-500/40",
+      "active": "amber-500",
+      "focus": "amber-400"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "heading": "Cormorant Garamond, serif",
+      "body": "IBM Plex Sans, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl font-serif tracking-tight text-amber-50 leading-tight",
+      "h2": "text-2xl sm:text-3xl font-serif tracking-tight text-amber-100",
+      "h3": "text-xl sm:text-2xl font-sans font-semibold text-amber-200",
+      "h4": "text-lg sm:text-xl font-sans font-medium text-amber-300",
+      "body": "text-base font-sans text-amber-50/90 leading-relaxed",
+      "small": "text-sm font-sans text-amber-200/70",
+      "numbers": "font-mono tracking-wider font-semibold text-amber-400"
+    },
+    "typesetting_rules": [
+      "Headings (H1/H2) MUST use the serif font (Cormorant Garamond) with tight letter spacing.",
+      "Overlines and small labels MUST be uppercase, text-xs, with wide spacing (tracking-[0.2em]).",
+      "Numeric values (cash, round/year 1965-1970, tile IDs) MUST use the monospace font for a ledger/accounting aesthetic.",
+      "Avoid 'Inter' and standard defaults. We want this to feel like a vintage document or game box."
+    ]
+  },
+  "layout_and_spacing": {
+    "system": "Generous Spacing (p-4, p-6, p-8) for panels, precise density for the board.",
+    "grid_bento": "Control Room Grid strategy for dashboards/panels. Dense UI utilizing all space without empty gaping holes.",
+    "board_layout": "The Game Board is the central focus. Since it involves 85 tiles overlaid on an image, the main board container must use `position: relative` and allow absolute placement based on percentage coordinates.",
+    "player_panels": "Located to the sides or bottom depending on viewport. Must use tactile neumorphic edges or solid borders to resemble physical paper/cards.",
+    "rules": [
+      "Mobile strategy: Implement a wrapper with `overflow-auto` or `react-zoom-pan-pinch` to let players pan around the large board on smaller screens.",
+      "Containers with borders MUST have internal padding (e.g., p-4 or p-6) to prevent content collision.",
+      "Do NOT center everything. Use asymmetry to create visual tension and direct the eye to the active player."
+    ]
+  },
+  "surfaces_and_micro_themes": {
+    "modals_and_overlays": "Glassmorphism (Crystal) - `bg-black/80 backdrop-blur-xl backdrop-saturate-150 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]`. Use for Deal Windows, Settings, and Shop Tile selection.",
+    "cards_and_tiles": "Neumorphism (Tactile) - Solid `stone-900` background with a `1px border-white/5` and an `amber-500/20` glow on hover.",
+    "active_player_indicator": "The 'Tracing Beam' - A glowing amber gradient border or highlight indicating whose turn it is in the player list."
+  },
+  "motion_and_interactions": {
+    "hover_states": "Interactive cards and board tiles lift (`-translate-y-1`) and gain an amber shadow (`shadow-[0_4px_12px_rgba(245,158,11,0.2)]`). text color must shift for better contrast.",
+    "drag_and_drop": "Tiles being dragged should scale up (`scale-105`) and rotate slightly (`rotate-3`) to simulate physical pickup.",
+    "turn_transitions": "Staggered fade-in (`opacity-0` to `opacity-100` with `translate-y-4`) when new cards/tiles are dealt.",
+    "accessibility": "Respect `prefers-reduced-motion` for complex animations."
+  },
+  "component_rules": {
+    "html_tailwind": "Use raw HTML + Tailwind for the main Game Board, Player Panels, Tile Grid, and Drag-and-Drop Zones. Shadcn is too rigid for the custom board overlay and complex draggable inventory.",
+    "shadcn": "Use heavily customized Shadcn components for Forms, Dropdowns, Dialogs (Trade Windows), and Tooltips.",
+    "customizations": "Override Shadcn's default Vercel-like borders with `amber-500/30`. Replace generic shadows with deep dark shadows. Strip 'ring-offset-background' to match dark stone backgrounds.",
+    "icons": "Use `lucide-react` but set `strokeWidth={1.5}` to make them feel more elegant and vintage, less bulky."
+  },
+  "media": {
+    "image_urls": [
+      {
+        "category": "landing_background",
+        "description": "Cinematic 1960s Chinatown gaming room background for the login and lobby pages.",
+        "url": "https://static.prod-images.emergentagent.com/jobs/37b2cbc1-a0ed-4427-9f40-37dadcb864c9/images/9858f980fcd0a9cf20c22508329f0394fb2b1639fcf1ac089100ecdf0e0ff128.png"
+      },
+      {
+        "category": "texture_overlay",
+        "description": "Vintage ledger/cash register texture used selectively in side panels or scoreboards.",
+        "url": "https://static.prod-images.emergentagent.com/jobs/37b2cbc1-a0ed-4427-9f40-37dadcb864c9/images/c81249a784d970be47fd68ed4515b209e8ed6481111dbe33cd26786036d6731e.png"
+      },
+      {
+        "category": "game_board",
+        "description": "The primary board image. Must be imported from user-provided assets (BOARD.png).",
+        "url": "BOARD.png"
+      }
+    ]
+  },
+  "accessibility": {
+    "contrast": "Ensure minimum 4.5:1 ratio for text. Amber-50 on stone-950 is highly accessible. Do not use dark red on black for critical text.",
+    "focus_states": "Focus states must have HIGHER contrast, utilizing `focus:ring-2 focus:ring-amber-400`.",
+    "testing": "All interactive and key informational elements MUST include `data-testid` attributes (e.g., `data-testid='tile-42'`, `data-testid='deal-window'`, `data-testid='accept-trade-button'`)."
+  },
+  "instructions_to_main_agent": [
+    "ASSET USAGE: Rely heavily on the provided BOARD.png and the 12 shop tiles (e.g. 30pzorvl_ANTIQUES.png) located in the project assets. DO NOT use placeholders.",
+    "BOARD TILES OVERLAY (CRITICAL): The board has 85 numbered tiles spread across 6 sections. You MUST map these 85 IDs (1-85) to relative (%) coordinates over BOARD.png. Create a configuration array of coordinates `[{id: 1, top: '10.5%', left: '15.2%'}, ...]`. Do not use a CSS Grid for this; use absolute positioning inside a relative container so it scales responsively.",
+    "DRAG AND DROP (TRADING): The trading system is the core mechanic. Implement robust drag-and-drop. Players should drag shop tiles and properties into a 'Deal Window'. Consider using an HTML5 DnD wrapper or simple mouse tracking combined with Framer Motion. The Deal Window should clearly split 'My Offer' vs 'Their Offer'.",
+    "RESPONSIVENESS / VIEWPORT: The board is massive. Implement a wrapper with `overflow-auto` or use a library like `react-zoom-pan-pinch` so players can zoom and pan around the board on smaller screens. The side panels (player stats, hand) should remain fixed or docked.",
+    "STATE & SOCKETS: The game loop (6 rounds tracking years 1965-1970) requires tight real-time state tracking via Socket.io. Keep UI presentation components (board, tiles, panels) completely isolated from socket logic via React hooks/context.",
+    "JAVASCRIPT NOT TYPESCRIPT: The project is strictly JavaScript (.js/.jsx), NOT TypeScript. Do not write types or interfaces in the code.",
+    "TESTING ATTRIBUTES: You MUST add `data-testid` attributes to absolutely every button, tile, input, and modal to ensure the testing agent can interact with the game.",
+    "GLOBAL TEXTURE: Apply a subtle CSS noise or SVG filter overlay to the main app container to simulate film grain or vintage paper texture, removing standard digital flatness."
+  ]
+}
