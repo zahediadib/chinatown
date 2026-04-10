@@ -13,17 +13,24 @@ export function AuthProvider({ children }) {
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
-        setUser(parsed);
-        axios.get(`${API}/auth/me`, {
-          headers: { Authorization: `Bearer ${parsed.token}` },
-        }).then(res => {
-          const updated = { ...parsed, active_room: res.data.active_room };
-          setUser(updated);
-          localStorage.setItem('ct_user', JSON.stringify(updated));
-        }).catch(() => {
+        if (parsed?.token && parsed?.user_id) {
+          setUser(parsed);
+          axios.get(`${API}/auth/me`, {
+            headers: { Authorization: `Bearer ${parsed.token}` },
+          }).then(res => {
+            const updated = { ...parsed, active_room: res.data.active_room };
+            setUser(updated);
+            localStorage.setItem('ct_user', JSON.stringify(updated));
+          }).catch((err) => {
+            if (err.response?.status === 401) {
+              localStorage.removeItem('ct_user');
+              setUser(null);
+            }
+          }).finally(() => setLoading(false));
+        } else {
           localStorage.removeItem('ct_user');
-          setUser(null);
-        }).finally(() => setLoading(false));
+          setLoading(false);
+        }
       } catch {
         localStorage.removeItem('ct_user');
         setLoading(false);
