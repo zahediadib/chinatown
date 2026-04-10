@@ -1,12 +1,12 @@
 import { Handshake } from 'lucide-react';
 
-export default function PlayerPanel({ players, userId, phase, initiateDeal, gameState }) {
+export default function PlayerPanel({ players, userId, phase, initiateDeal, gameState, isOpen }) {
   const canDeal = phase === 'trade';
   const myDeals = gameState?.active_deals || [];
   const iAmInDeal = myDeals.some(d => d.status !== 'cancelled' && (d.initiator === userId || d.target === userId));
 
   return (
-    <div className="side-panel" data-testid="player-panel">
+    <div className={`side-panel ${isOpen ? 'mobile-open' : ''}`} data-testid="player-panel">
       <div className="section-label">Players</div>
       {players.map(player => {
         const isMe = player.id === userId;
@@ -53,7 +53,6 @@ export default function PlayerPanel({ players, userId, phase, initiateDeal, game
         );
       })}
 
-      {/* Drawn tiles info */}
       {gameState?.tiles_drawn && Object.keys(gameState.tiles_drawn).length > 0 && phase === 'trade' && (
         <div style={{ marginTop: '1rem' }}>
           <div className="section-label">Tiles Drawn This Round</div>

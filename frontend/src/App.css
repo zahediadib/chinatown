@@ -334,6 +334,25 @@
   box-shadow: 0 0 0 2px #ef4444;
 }
 
+/* Card selection phase — pulsing glow on dealt spaces */
+.board-tile-overlay.card-dealt {
+  animation: cardPulse 1.5s ease-in-out infinite;
+  border-width: 2.5px;
+  z-index: 5;
+}
+.board-tile-overlay.card-picked {
+  animation: none;
+  box-shadow: 0 0 0 3px var(--gold), 0 0 16px rgba(245,158,11,0.5);
+  border-width: 3px;
+  z-index: 6;
+  transform: scale(1.12);
+}
+
+@keyframes cardPulse {
+  0%, 100% { box-shadow: 0 0 6px 2px rgba(245,158,11,0.35); }
+  50%      { box-shadow: 0 0 14px 5px rgba(245,158,11,0.65); }
+}
+
 /* Side Panel */
 .side-panel {
   width: 280px;
