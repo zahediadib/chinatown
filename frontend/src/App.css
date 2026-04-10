@@ -841,3 +841,105 @@
   margin-bottom: 0.5rem;
   margin-top: 0.75rem;
 }
+
+/* Card Selection Bar (on-board highlight mode) */
+.card-selection-bar {
+  background: rgba(245,158,11,0.12);
+  border-bottom: 1px solid var(--border-gold);
+  padding: 0.5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-shrink: 0;
+  animation: barSlideIn 0.3s ease;
+}
+.card-selection-bar.waiting {
+  background: rgba(16,185,129,0.08);
+  border-color: rgba(16,185,129,0.25);
+}
+.card-sel-text {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+.card-sel-count {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--gold);
+  font-weight: 600;
+}
+@keyframes barSlideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile panel toggle */
+.mobile-panel-toggle {
+  display: none;
+  position: fixed;
+  bottom: 80px;
+  right: 12px;
+  z-index: 30;
+  padding: 0.4rem 0.75rem;
+  background: var(--gold);
+  color: var(--bg-base);
+  font-weight: 600;
+  font-size: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* Connection toast */
+.connection-toast {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--mahogany);
+  color: #fca5a5;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  z-index: 100;
+  font-size: 0.8rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .game-main { flex-direction: column; }
+
+  .side-panel {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    height: 100vh;
+    z-index: 35;
+    transition: right 0.3s ease;
+    box-shadow: -4px 0 24px rgba(0,0,0,0.6);
+  }
+  .side-panel.mobile-open { right: 0; }
+
+  .mobile-panel-toggle { display: block; }
+
+  .board-area { padding: 0.25rem; }
+
+  .game-header {
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .deal-window {
+    right: 0.5rem;
+    left: 0.5rem;
+    width: auto;
+    bottom: 80px;
+  }
+
+  .card-selection-bar {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 0.75rem 1rem;
+  }
+}
