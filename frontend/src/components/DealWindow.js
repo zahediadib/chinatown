@@ -2,6 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { X } from 'lucide-react';
 import { formatTileType, formatUsername } from '../lib/utils';
 
+const SPECTATOR_WINDOW_OFFSET = 24;
+const BASE_WINDOW_RIGHT = 300;
+const BASE_WINDOW_BOTTOM = 80;
+
 export default function DealWindow({ deal, userId, gameState, updateOffer, confirmDeal, cancelDeal, canInteract = true, windowIndex = 0 }) {
   const isInitiator = deal.initiator === userId;
   const isParticipant = isInitiator || deal.target === userId;
@@ -72,10 +76,10 @@ export default function DealWindow({ deal, userId, gameState, updateOffer, confi
     return formatTileType(tile?.type) || 'Unknown Tile';
   };
 
-  const spectatorOffset = windowIndex * 24;
+  const spectatorOffset = windowIndex * SPECTATOR_WINDOW_OFFSET;
   const windowStyle = {
-    right: `${300 + spectatorOffset}px`,
-    bottom: `${80 + spectatorOffset}px`,
+    right: `${BASE_WINDOW_RIGHT + spectatorOffset}px`,
+    bottom: `${BASE_WINDOW_BOTTOM + spectatorOffset}px`,
   };
 
   return (

@@ -18,14 +18,18 @@ const TILE_TYPE_LABELS = {
   RESTAURANT: 'Restaurant',
   ANTIQUES: 'Antiques',
   FACTORY: 'Factory',
-  ANTI: 'Antiques',
-  SEAF: 'Seafood',
+};
+
+const TILE_TYPE_ALIASES = {
+  ANTI: 'ANTIQUES',
+  SEAF: 'SEAFOOD',
 };
 
 export function formatTileType(type) {
   if (!type) return '';
   const normalized = String(type).trim().toUpperCase();
-  return TILE_TYPE_LABELS[normalized] || String(type);
+  const canonical = TILE_TYPE_ALIASES[normalized] || normalized;
+  return TILE_TYPE_LABELS[canonical] || String(type);
 }
 
 export function formatUsername(username) {
