@@ -5,6 +5,7 @@ import { formatTileType, formatUsername } from '../lib/utils';
 const SPECTATOR_WINDOW_OFFSET = 24;
 const BASE_WINDOW_RIGHT = 300;
 const BASE_WINDOW_BOTTOM = 80;
+const MAX_STACKED_WINDOWS = 4;
 
 export default function DealWindow({ deal, userId, gameState, updateOffer, confirmDeal, cancelDeal, canInteract = true, windowIndex = 0 }) {
   const isInitiator = deal.initiator === userId;
@@ -73,10 +74,10 @@ export default function DealWindow({ deal, userId, gameState, updateOffer, confi
 
   const getOfferedTileLabel = (tileId, offeredTiles) => {
     const tile = offeredTiles.find(t => t.id === tileId);
-    return formatTileType(tile?.type) || 'Unknown Tile';
+    return formatTileType(tile?.type) || 'Tile data unavailable';
   };
 
-  const spectatorOffset = windowIndex * SPECTATOR_WINDOW_OFFSET;
+  const spectatorOffset = Math.min(windowIndex, MAX_STACKED_WINDOWS) * SPECTATOR_WINDOW_OFFSET;
   const windowStyle = {
     right: `${BASE_WINDOW_RIGHT + spectatorOffset}px`,
     bottom: `${BASE_WINDOW_BOTTOM + spectatorOffset}px`,
