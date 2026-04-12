@@ -21,9 +21,9 @@ export default function DealWindow({ deal, userId, gameState, updateOffer, confi
   const targetOfferTiles = Array.isArray(deal.target_offer_tiles) ? deal.target_offer_tiles : [];
   const theirOfferTiles = isInitiator ? targetOfferTiles : initiatorOfferTiles;
 
-  const [localSpaces, setLocalSpaces] = useState((isParticipant ? myOffer?.spaces : []) || []);
-  const [localTiles, setLocalTiles] = useState((isParticipant ? myOffer?.tiles : []) || []);
-  const [localMoney, setLocalMoney] = useState((isParticipant ? myOffer?.money : 0) || 0);
+  const [localSpaces, setLocalSpaces] = useState(isParticipant ? (myOffer?.spaces || []) : []);
+  const [localTiles, setLocalTiles] = useState(isParticipant ? (myOffer?.tiles || []) : []);
+  const [localMoney, setLocalMoney] = useState(isParticipant ? (myOffer?.money || 0) : 0);
 
   useEffect(() => {
     if (!isParticipant) return;
@@ -124,7 +124,7 @@ export default function DealWindow({ deal, userId, gameState, updateOffer, confi
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '0.5rem' }}>
             {(isParticipant ? myTiles : initiatorOfferTiles).map(tile => (
               <div
-                key={tile.id || tile}
+                key={tile.id}
                 onClick={() => toggleTile(tile.id)}
                 style={{
                   padding: '2px 6px', borderRadius: 3, fontSize: '0.6rem', cursor: canEdit ? 'pointer' : 'default',
