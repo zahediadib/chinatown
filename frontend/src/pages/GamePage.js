@@ -5,6 +5,7 @@ import Board from '../components/Board';
 import PlayerPanel from '../components/PlayerPanel';
 import GameHeader from '../components/GameHeader';
 import DealWindow from '../components/DealWindow';
+import { formatTileType, formatUsername } from '../lib/utils';
 
 export default function GamePage() {
   const { gameState, roomInfo, connected, error, dealRequest, activeDeal, userId,
@@ -24,7 +25,10 @@ export default function GamePage() {
   const isMyTurn = phase === 'place_tiles' && gameState?.player_order?.[gameState?.current_turn_index] === userId;
   const myDealtCards = gameState?.my_dealt_cards || [];
   const nKeep = gameState?.n_keep || 0;
-  const iAmInDeal = !!activeDeal && (activeDeal.initiator === userId || activeDeal.target === userId);
+  const negotiatingDeals = (gameState?.active_deals || [])
+    .filter(d => d?.status === 'negotiating' && d?.detail)
+    .map(d => d.detail);
+  const iAmInDeal = negotiatingDeals.some(d => d.initiator === userId || d.target === userId);
   const cardSelectionMode = phase === 'select_cards' && !gameState?.my_selected;
 
   const handleCardToggle = (cardId) => {
@@ -74,11 +78,11 @@ export default function GamePage() {
           </p>
           <div className="waiting-players">
             {roomInfo.players?.map((p, i) => (
-              <div key={p.user_id} className="waiting-player" data-testid={`waiting-player-${i}`}>
-                <div className="player-color-dot" style={{ background: ['#E53E3E','#3182CE','#38A169','#D69E2E','#805AD5'][i] }} />
-                <span>{p.username} {p.user_id === roomInfo.host ? '(Host)' : ''}</span>
-              </div>
-            ))}
+                <div key={p.user_id} className="waiting-player" data-testid={`waiting-player-${i}`}>
+                  <div className="player-color-dot" style={{ background: ['#E53E3E','#3182CE','#38A169','#D69E2E','#805AD5'][i] }} />
+                  <span>{formatUsername(p.username)} {p.user_id === roomInfo.host ? '(Host)' : ''}</span>
+                </div>
+              ))}
           </div>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: '1rem' }}>
             {roomInfo.players?.length || 0}/5 players {roomInfo.players?.length < 3 ? '(need at least 3)' : ''}
@@ -189,15 +193,15 @@ export default function GamePage() {
       <div className="bottom-panel" data-testid="hand-panel">
         <span className="section-label" style={{ marginTop: 0, whiteSpace: 'nowrap' }}>Your Tiles:</span>
         {myTiles.map(tile => (
-          <div
-            key={tile.id}
-            className={`hand-tile ${selectedTile?.id === tile.id ? 'selected' : ''}`}
-            onClick={() => handleTileSelect(tile)}
-            data-testid={`hand-tile-${tile.id}`}
-          >
-            <img src={`/tiles/${tile.type}.png`} alt={tile.type} onError={(e) => { e.target.style.display = 'none'; }} />
-            <div className="tile-label">{tile.type.slice(0, 4)}</div>
-          </div>
+            <div
+              key={tile.id}
+              className={`hand-tile ${selectedTile?.id === tile.id ? 'selected' : ''}`}
+              onClick={() => handleTileSelect(tile)}
+              data-testid={`hand-tile-${tile.id}`}
+            >
+            <img src={`/tiles/${tile.type}.png`} alt={formatTileType(tile.type)} onError={(e) => { e.target.style.display = 'none'; }} />
+            <div className="tile-label">{formatTileType(tile.type)}</div>
+            </div>
         ))}
         {myTiles.length === 0 && <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>No tiles in hand</span>}
       </div>
@@ -211,12 +215,12 @@ export default function GamePage() {
               <div key={pid} style={{ marginBottom: '1rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
                   <div className="player-color-dot" style={{ background: gameState.players[pid]?.color }} />
-                  <span style={{ fontWeight: 600 }}>{gameState.players[pid]?.username}</span>
+                  <span style={{ fontWeight: 600 }}>{formatUsername(gameState.players[pid]?.username)}</span>
                   <span className="font-mono" style={{ color: 'var(--jade-light)', marginLeft: 'auto' }}>+${data.total?.toLocaleString()}</span>
                 </div>
                 {data.businesses?.map((biz, i) => (
                   <div key={i} className="income-item">
-                    <span>{biz.type} (size {biz.size})</span>
+                    <span>{formatTileType(biz.type)} (size {biz.size})</span>
                     <span className="amount">${biz.income?.toLocaleString()}</span>
                   </div>
                 ))}
@@ -240,7 +244,7 @@ export default function GamePage() {
                 <div key={p.id} className={`score-row ${i === 0 ? 'winner' : ''}`} data-testid={`score-${p.id}`}>
                   <div className="score-name">
                     <div className="player-color-dot" style={{ background: p.color }} />
-                    <span>{p.username} {i === 0 ? ' - WINNER!' : ''}</span>
+                    <span>{formatUsername(p.username)} {i === 0 ? ' - WINNER!' : ''}</span>
                   </div>
                   <div className="score-money">${p.money?.toLocaleString()}</div>
                 </div>
@@ -256,7 +260,7 @@ export default function GamePage() {
         <div className="deal-request-popup" data-testid="deal-request-popup">
           <h3>Deal Request</h3>
           <p style={{ color: 'var(--text-secondary)' }}>
-            <strong style={{ color: 'var(--gold)' }}>{dealRequest.initiator_name}</strong> wants to trade with you
+            <strong style={{ color: 'var(--gold)' }}>{formatUsername(dealRequest.initiator_name)}</strong> wants to trade with you
           </p>
           <div className="actions">
             <button className="btn-gold" onClick={() => respondDeal(dealRequest.id, true)} data-testid="accept-deal-btn">Accept</button>
@@ -266,8 +270,18 @@ export default function GamePage() {
       )}
 
       {/* Active Deal Window */}
-      {activeDeal && activeDeal.status === 'negotiating' && (
-        <DealWindow deal={activeDeal} userId={userId} gameState={gameState} updateOffer={updateOffer} confirmDeal={confirmDeal} cancelDeal={cancelDeal} />
+      {negotiatingDeals.map((deal, index) => (
+        <DealWindow
+          key={deal.id}
+          deal={deal}
+          userId={userId}
+          gameState={gameState}
+          updateOffer={updateOffer}
+          confirmDeal={confirmDeal}
+          cancelDeal={cancelDeal}
+          canInteract={deal.initiator === userId || deal.target === userId}
+          windowIndex={index}
+        />
       )}
     </div>
   );

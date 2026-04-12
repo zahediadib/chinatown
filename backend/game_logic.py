@@ -299,6 +299,13 @@ class GameEngine:
 
     @staticmethod
     def get_player_view(game, player_id):
+        def resolve_offer_tiles(owner_id, offer):
+            owner_tiles = {tile['id']: tile.get('type') for tile in game['players'][owner_id].get('shop_tiles', [])}
+            return [
+                {'id': tile_id, 'type': owner_tiles.get(tile_id)}
+                for tile_id in offer.get('tiles', [])
+            ]
+
         view = {
             'room_id': game['room_id'],
             'status': game['status'],
@@ -338,8 +345,12 @@ class GameEngine:
 
         for did, deal in game['active_deals'].items():
             summary = {'deal_id': did, 'initiator': deal['initiator'], 'target': deal['target'], 'status': deal['status']}
-            if player_id in (deal['initiator'], deal['target']):
-                summary['detail'] = deal
+            detail = dict(deal)
+            detail['initiator_offer'] = dict(deal.get('initiator_offer', {}))
+            detail['target_offer'] = dict(deal.get('target_offer', {}))
+            detail['initiator_offer_tiles'] = resolve_offer_tiles(deal['initiator'], deal.get('initiator_offer', {}))
+            detail['target_offer_tiles'] = resolve_offer_tiles(deal['target'], deal.get('target_offer', {}))
+            summary['detail'] = detail
             view['active_deals'].append(summary)
 
         # Include this round's placements (for undo)

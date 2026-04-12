@@ -1,3 +1,5 @@
+import { formatUsername } from '../lib/utils';
+
 export default function GameHeader({ gameState, phase, isMyTurn, endTrading, cancelEndTrading, donePlacing, continueGame }) {
   const year = gameState?.year || 1965;
   const round = gameState?.round || 1;
@@ -47,7 +49,7 @@ export default function GameHeader({ gameState, phase, isMyTurn, endTrading, can
 
         {phase === 'place_tiles' && !isMyTurn && (
           <span className="phase-info-text">
-            Waiting for {gameState?.players?.[gameState?.player_order?.[gameState?.current_turn_index]]?.username} to place...
+            Waiting for {formatUsername(gameState?.players?.[gameState?.player_order?.[gameState?.current_turn_index]]?.username)} to place...
           </span>
         )}
       </div>
