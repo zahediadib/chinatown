@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { BOARD_TILES } from '../gameData';
+import { formatTileType, formatUsername } from '../lib/utils';
 
 export default function Board({
   gameState, onTileClick, onTileUndo, selectedTile, phase, userId, isMyTurn,
@@ -89,14 +90,14 @@ export default function Board({
               borderColor: isCardSelected ? 'var(--gold)' : isDealt ? 'var(--gold-hover)' : isOwned ? ownerColor : 'rgba(255,255,255,0.15)',
             }}
             onClick={() => handleClick(tile.id)}
-            title={`Space ${tile.id}${isOwned ? ` - ${gameState?.players?.[space.owner]?.username}` : ''}${hasShop ? ` (${space.shop_tile.type})` : ''}`}
+            title={`Space ${tile.id}${isOwned ? ` - ${formatUsername(gameState?.players?.[space.owner]?.username)}` : ''}${hasShop ? ` (${formatTileType(space.shop_tile.type)})` : ''}`}
             data-testid={`board-tile-${tile.id}`}
           >
             {hasShop && (
               <img
                 className="tile-shop-img"
                 src={`/tiles/${space.shop_tile.type}.png`}
-                alt={space.shop_tile.type}
+                alt={formatTileType(space.shop_tile.type)}
                 onError={(e) => { e.target.style.display = 'none'; }}
               />
             )}

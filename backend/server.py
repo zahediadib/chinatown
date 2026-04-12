@@ -380,6 +380,7 @@ async def handle_update_offer(sid, data):
         psid = user_to_sid.get(pid)
         if psid:
             await sio.emit('deal_update', deal, room=psid)
+    await broadcast_game_state(session.get('room_id'))
 
 
 @sio.on('confirm_deal')

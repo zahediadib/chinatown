@@ -1,4 +1,5 @@
 import { Handshake } from 'lucide-react';
+import { formatTileType, formatUsername } from '../lib/utils';
 
 export default function PlayerPanel({ players, userId, phase, initiateDeal, gameState, isOpen }) {
   const canDeal = phase === 'trade';
@@ -26,7 +27,7 @@ export default function PlayerPanel({ players, userId, phase, initiateDeal, game
           >
             <div className="player-name">
               <div className="player-color-dot" style={{ background: player.color }} />
-              <span>{player.username} {isMe ? '(You)' : ''}</span>
+              <span>{formatUsername(player.username)} {isMe ? '(You)' : ''}</span>
               {!player.connected && <span style={{ fontSize: '0.65rem', color: '#ef4444' }}>OFFLINE</span>}
             </div>
             <div className="player-money" data-testid={`player-money-${player.id}`}>
@@ -54,11 +55,21 @@ export default function PlayerPanel({ players, userId, phase, initiateDeal, game
       })}
 
       {gameState?.tiles_drawn && Object.keys(gameState.tiles_drawn).length > 0 && phase === 'trade' && (
-        <div style={{ marginTop: '1rem' }}>
+        <div className="tiles-drawn-section">
           <div className="section-label">Tiles Drawn This Round</div>
-          {Object.entries(gameState.tiles_drawn).map(([pid, tiles]) => (
-            <div key={pid} style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>
-              <span style={{ color: gameState.players[pid]?.color }}>{gameState.players[pid]?.username}</span>: {tiles.map(t => t.type.slice(0, 4)).join(', ')}
+          {Object.entries(gameState.tiles_drawn).map(([pid, tiles], rowIndex) => (
+            <div key={pid} className="tiles-drawn-row" style={{ animationDelay: `${rowIndex * 70}ms` }}>
+              <span className="tiles-drawn-player" style={{ color: gameState.players[pid]?.color }}>
+                {formatUsername(gameState.players[pid]?.username)}
+              </span>
+              <span className="tiles-drawn-separator">:</span>
+              <span className="tiles-drawn-tiles">
+                {tiles.map(t => (
+                  <span key={`${pid}-${t.id}`} className="tile-name-chip">
+                    {formatTileType(t.type)}
+                  </span>
+                ))}
+              </span>
             </div>
           ))}
         </div>
