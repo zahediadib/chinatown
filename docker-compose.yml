@@ -3,6 +3,12 @@ services:
     image: mongo:7.0.5
     container_name: chinatown-mongodb
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     ports:
       - "27017:27017"
     volumes:
@@ -14,7 +20,8 @@ services:
     container_name: chinatown-backend
     restart: unless-stopped
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     environment:
       MONGO_URL: mongodb://mongodb:27017
       DB_NAME: chinatown
@@ -32,7 +39,6 @@ services:
     environment:
       REACT_APP_BACKEND_URL: ${REACT_APP_BACKEND_URL:-http://localhost:8000}
       NODE_ENV: ${NODE_ENV:-development}
-      HOST: 0.0.0.0
       CHOKIDAR_USEPOLLING: "true"
       WATCHPACK_POLLING: "true"
     ports:

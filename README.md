@@ -20,6 +20,8 @@ export JWT_SECRET="replace-with-a-strong-secret"
 docker compose up --build
 ```
 
+Use a high-entropy secret (recommended: at least 32 random characters).
+
 Optional (for frontend API target override):
 
 ```bash
