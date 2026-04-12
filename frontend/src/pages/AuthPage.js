@@ -31,7 +31,7 @@ export default function AuthPage() {
     <div className="auth-page">
       <div
         className="auth-bg"
-        style={{ backgroundImage: `url(https://static.prod-images.emergentagent.com/jobs/37b2cbc1-a0ed-4427-9f40-37dadcb864c9/images/9858f980fcd0a9cf20c22508329f0394fb2b1639fcf1ac089100ecdf0e0ff128.png)` }}
+        style={{ backgroundImage: `/mainbg.png` }}
       />
       <div className="auth-card" data-testid="auth-card">
         <h1 className="auth-title">Chinatown</h1>

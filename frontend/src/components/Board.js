@@ -100,7 +100,6 @@ export default function Board({
                 onError={(e) => { e.target.style.display = 'none'; }}
               />
             )}
-            <span className="tile-number">{tile.id}</span>
           </div>
         );
       })}
