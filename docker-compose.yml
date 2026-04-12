@@ -1,0 +1,42 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: chinatown-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build:
+      context: /home/runner/work/chinatown/chinatown/backend
+    container_name: chinatown-backend
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URL: mongodb://mongodb:27017
+      DB_NAME: chinatown
+      JWT_SECRET: change-this-secret
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: /home/runner/work/chinatown/chinatown/frontend
+    container_name: chinatown-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      REACT_APP_BACKEND_URL: http://localhost:8000
+      NODE_ENV: development
+      HOST: 0.0.0.0
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+    ports:
+      - "3000:3000"
+
+volumes:
+  mongo_data:
