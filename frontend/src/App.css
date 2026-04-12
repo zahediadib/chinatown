@@ -492,8 +492,8 @@
 }
 
 .hand-tile {
-    width: 76px;
-    height: 60px;
+    width: 56px;
+    height: 56px;
     border-radius: 6px;
     border: 2px solid var(--border-subtle);
     cursor: pointer;

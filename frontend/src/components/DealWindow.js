@@ -74,10 +74,10 @@ export default function DealWindow({ deal, userId, gameState, updateOffer, confi
 
   const getOfferedTileLabel = (tileId, offeredTiles) => {
     const tile = offeredTiles.find(t => t.id === tileId);
-    return formatTileType(tile?.type) || 'Tile data unavailable';
+    return formatTileType(tile?.type) || 'Unknown tile type';
   };
 
-  const spectatorOffset = Math.min(windowIndex, MAX_STACKED_WINDOWS) * SPECTATOR_WINDOW_OFFSET;
+  const spectatorOffset = (windowIndex % (MAX_STACKED_WINDOWS + 1)) * SPECTATOR_WINDOW_OFFSET;
   const windowStyle = {
     right: `${BASE_WINDOW_RIGHT + spectatorOffset}px`,
     bottom: `${BASE_WINDOW_BOTTOM + spectatorOffset}px`,
