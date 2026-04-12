@@ -1,6 +1,6 @@
 services:
   mongodb:
-    image: mongo:7
+    image: mongo:7.0.5
     container_name: chinatown-mongodb
     restart: unless-stopped
     ports:
@@ -18,7 +18,7 @@ services:
     environment:
       MONGO_URL: mongodb://mongodb:27017
       DB_NAME: chinatown
-      JWT_SECRET: ${JWT_SECRET:-change-this-secret}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET environment variable is required}
     ports:
       - "8000:8000"
 
@@ -30,8 +30,8 @@ services:
     depends_on:
       - backend
     environment:
-      REACT_APP_BACKEND_URL: http://localhost:8000
-      NODE_ENV: development
+      REACT_APP_BACKEND_URL: ${REACT_APP_BACKEND_URL:-http://localhost:8000}
+      NODE_ENV: ${NODE_ENV:-development}
       HOST: 0.0.0.0
       CHOKIDAR_USEPOLLING: "true"
       WATCHPACK_POLLING: "true"

@@ -16,7 +16,14 @@ The project now includes Docker support for:
 From the repository root:
 
 ```bash
+export JWT_SECRET="replace-with-a-strong-secret"
 docker compose up --build
+```
+
+Optional (for frontend API target override):
+
+```bash
+export REACT_APP_BACKEND_URL="http://localhost:8000"
 ```
 
 Then open:
